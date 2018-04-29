@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "mpc.h"
+
+
 #ifdef _WIN32
 #include <string.h>
 #define PLATFORM_ID "_WIN32"
@@ -28,17 +31,44 @@ void add_history(char* unused) {
 #endif
 
 
-
 int main(int argc,char** argv){
-	puts("Lay Plus Plus Language Version 0.0.0.1 running on:");
+
+
+	/********************/
+	//mpc lang
+	mpc_parser_t* Number=mpc_new("number");
+	mpc_parser_t* Operator=mpc_new("operator");
+	mpc_parser_t* Express=mpc_new("express");
+	mpc_parser_t* Lppl=mpc_new("lppl");
+
+	mpca_lang(MPCA_LANG_DEFAULT,
+		"																											\
+			number	:/-?[0-9]+/	;																\
+			operator:'+' | '-' | '*' | '/' ;										\
+			express	:<number> | '(' <operator> <express>+ ')';	\
+			lppl		:/^/ <operator> <express>+ /$/;							\
+		",
+		Number,Operator,Express,Lppl);
+
+	/********************/
+
+	puts("Lay Plus Plus Language Version 0.0.0.3 running on:");
 	puts(PLATFORM_ID);
 	puts("Press Ctrl+C to exit\n");
 
 	while(1){
 		char *input=readline("LPPL> ");
 		add_history(input);
+		/*mpc output*/
+		mpc_result_t r;
+		if(mpc_parse("<stdin>",input,Lppl,&r)){
+			mpc_ast_print(r.output);
+			mpc_ast_delete(r.output);
+		}else{
+			mpc_err_print(r.error);
+			mpc_err_delete(r.error);
+		}
 
-		printf("U puts %s on the display\n ", input);
 		free(input);
 	}
 	return 0;
