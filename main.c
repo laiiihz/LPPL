@@ -37,18 +37,22 @@ int main(int argc,char** argv){
 	/********************/
 	//mpc lang
 	mpc_parser_t* Number=mpc_new("number");
+	mpc_parser_t* Numberq=mpc_new("numberq");
 	mpc_parser_t* Operator=mpc_new("operator");
 	mpc_parser_t* Express=mpc_new("express");
 	mpc_parser_t* Lppl=mpc_new("lppl");
+	mpc_parser_t* Numbers=mpc_new("numbers");
 
 	mpca_lang(MPCA_LANG_DEFAULT,
 		"																											\
-			number	:/-?[0-9]+/	;																\
-			operator:'+' | '-' | '*' | '/' ;										\
-			express	:<number> | '(' <operator> <express>+ ')';	\
+			number	:/-?[0-9]+[.][0-9]+/;												\
+			numberq	:/-?[0-9]+/;																\
+			numbers	:<number> | <numberq>;											\
+			operator:'+' | '-' | '*' | '/' | '%' | 'add' ;								\
+			express	:<numbers> | '(' <operator> <express>+ ')';	\
 			lppl		:/^/ <operator> <express>+ /$/;							\
 		",
-		Number,Operator,Express,Lppl);
+		Number,Numberq,Numbers,Operator,Express,Lppl);
 
 	/********************/
 
