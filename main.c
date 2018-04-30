@@ -44,19 +44,19 @@ int main(int argc,char** argv){
 	mpc_parser_t* Numbers=mpc_new("numbers");
 
 	mpca_lang(MPCA_LANG_DEFAULT,
-		"																											\
-			number	:/-?[0-9]+[.][0-9]+/;												\
-			numberq	:/-?[0-9]+/;																\
-			numbers	:<number> | <numberq>;											\
-			operator:'+' | '-' | '*' | '/' | '%' | 'add' ;								\
-			express	:<numbers> | '(' <operator> <express>+ ')';	\
-			lppl		:/^/ <operator> <express>+ /$/;							\
+		"																																					\
+			number	:/-?[0-9]+[.][0-9]+/;																						\
+			numberq	:/-?[0-9]+/;																										\
+			numbers	:<number> | <numberq>;																					\
+			operator:'+' | '-' | '*' | '/' | '%' | \"add\" | \"sub\" | \"mul\" | \"div\" ;	\
+			express	:<numbers> | '(' <operator> <express>+ ')';											\
+			lppl		:/^/ <operator> <express>+ /$/;																	\
 		",
 		Number,Numberq,Numbers,Operator,Express,Lppl);
 
 	/********************/
 
-	puts("Lay Plus Plus Language Version 0.0.0.3 running on:");
+	puts("Lay Plus Plus Language Version 0.0.0.4 running on:");
 	puts(PLATFORM_ID);
 	puts("Press Ctrl+C to exit\n");
 
