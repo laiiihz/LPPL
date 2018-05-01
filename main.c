@@ -36,9 +36,8 @@ long eval_op(long x,char* oper,long y){
 	if(strcmp(oper,"-")==0||strcmp(oper,"sub")==0)return x-y;
 	if(strcmp(oper,"*")==0||strcmp(oper,"mul")==0)return x*y;
 	if(strcmp(oper,"/")==0||strcmp(oper,"div")==0)return x/y;
-	if(strcmp(oper,"min")==0){
-		//TODO
-	}
+	if(strcmp(oper,"min")==0){return (x>y)?y:x;}
+	if(strcmp(oper,"max")==0){return (x>y)?x:y;}
 	if(strcmp(oper,"%")==0)return x%y;
 }
 
@@ -91,7 +90,7 @@ int main(int argc,char** argv){
 
 	/********************/
 
-	puts("Lay Plus Plus Language Version 0.0.0.4 running on:");
+	puts("Lay Plus Plus Language Version 0.0.0.8 running on:");
 	puts(PLATFORM_ID);
 	puts("Press Ctrl+C to exit\n");
 
