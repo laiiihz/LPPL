@@ -31,6 +31,39 @@ void add_history(char* unused) {
 #endif
 
 
+long eval_op(long x,char* oper,long y){
+	if(strcmp(oper,"+")==0||strcmp(oper,"add")==0)return x+y;
+	if(strcmp(oper,"-")==0||strcmp(oper,"sub")==0)return x-y;
+	if(strcmp(oper,"*")==0||strcmp(oper,"mul")==0)return x*y;
+	if(strcmp(oper,"/")==0||strcmp(oper,"div")==0)return x/y;
+	if(strcmp(oper,"min")==0){
+		//TODO
+	}
+	if(strcmp(oper,"%")==0)return x%y;
+}
+
+long eval(mpc_ast_t* t){
+
+	if(strstr(t->tag,"number")){
+		return atoi(t->contents);
+	}
+
+	char *oper=t->children[1]->contents;
+
+	long x=eval(t->children[2]);
+	int i=3;
+
+	while(strstr(t->children[i]->tag,"expr")){
+		x=eval_op(x,oper,eval(t->children[i]));
+		i++;
+	}
+
+	return x;
+}
+
+
+
+
 int main(int argc,char** argv){
 
 
@@ -48,7 +81,9 @@ int main(int argc,char** argv){
 			number	:/-?[0-9]+[.][0-9]+/;																						\
 			numberq	:/-?[0-9]+/;																										\
 			numbers	:<number> | <numberq>;																					\
-			operator:'+' | '-' | '*' | '/' | '%' | \"add\" | \"sub\" | \"mul\" | \"div\" ;	\
+			operator:'+' | '-' | '*' | '/' | '%' | \"add\" |												\
+			 				\"sub\" | \"mul\" | \"div\" | \"min\"  |												\
+							\"max\";																												\
 			express	:<numbers> | '(' <operator> <express>+ ')';											\
 			lppl		:/^/ <operator> <express>+ /$/;																	\
 		",
@@ -66,7 +101,8 @@ int main(int argc,char** argv){
 		/*mpc output*/
 		mpc_result_t r;
 		if(mpc_parse("<stdin>",input,Lppl,&r)){
-			mpc_ast_print(r.output);
+			long result =eval(r.output);
+			printf(">%li\n",result);
 			mpc_ast_delete(r.output);
 		}else{
 			mpc_err_print(r.error);
