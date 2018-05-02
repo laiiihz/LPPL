@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <math.h>
 #include "mpc.h"
 
 
@@ -36,6 +36,7 @@ long eval_op(long x,char* oper,long y){
 	if(strcmp(oper,"-")==0||strcmp(oper,"sub")==0)return x-y;
 	if(strcmp(oper,"*")==0||strcmp(oper,"mul")==0)return x*y;
 	if(strcmp(oper,"/")==0||strcmp(oper,"div")==0)return x/y;
+	if(strcmp(oper,"^")==0)return pow(x,y);
 	if(strcmp(oper,"min")==0){return (x>y)?y:x;}
 	if(strcmp(oper,"max")==0){return (x>y)?x:y;}
 	if(strcmp(oper,"%")==0)return x%y;
@@ -82,7 +83,7 @@ int main(int argc,char** argv){
 			numbers	:<number> | <numberq>;																					\
 			operator:'+' | '-' | '*' | '/' | '%' | \"add\" |												\
 			 				\"sub\" | \"mul\" | \"div\" | \"min\"  |												\
-							\"max\";																												\
+							\"max\" | '^';																									\
 			express	:<numbers> | '(' <operator> <express>+ ')';											\
 			lppl		:/^/ <operator> <express>+ /$/;																	\
 		",
